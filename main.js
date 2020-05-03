@@ -18,7 +18,7 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -42,27 +42,24 @@ app.on("activate", function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 ipcMain.on("open-file-dialog", (event) => {
-  dialog.showOpenDialogSync(
-    {
-      properties: ["openFile"],
-      filter: [
-        {
-          name: "Markdown Files",
-          extensions: ["md", "mdown", "markdown", "marcdown"],
-        },
-        { name: "Text Files", extensions: ["txt", "text"] },
-      ],
-    },
-    (files) => {
-      if (files) {
-        console.log(files);
-        event.sender.send("selected-directory", files);
-      }
-    }
-  );
+  const files = dialog.showOpenDialogSync({
+    properties: ["openFile"],
+    filters: [
+      {
+        name: "Markdown Files",
+        extensions: ["md", "mdown", "markdown", "marcdown"],
+      },
+      { name: "Text Files", extensions: ["txt", "text"] },
+    ],
+  });
+  if (files) {
+    let content = openFile(files[0]);
+    event.sender.send("selected-file", files, content);
+  }
 });
 
 function openFile(file) {
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
+  return content;
 }
