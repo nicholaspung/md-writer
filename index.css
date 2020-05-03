@@ -1,0 +1,74 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 25% 37% 37%;
+  grid-template-rows: 10% 90%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+h3 {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+section {
+  border-top: 1px solid black;
+}
+
+nav {
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
+}
+
+nav > ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+button {
+  background-color: white;
+  border: 1px solid black;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem;
+}
+
+textarea {
+  flex: 1;
+  resize: none;
+}
+
+.left-side {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  border-right: 1px solid black;
+}
+
+.edit-side {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  border-right: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.render-side {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
