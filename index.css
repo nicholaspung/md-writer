@@ -72,3 +72,8 @@ textarea {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
 }
+
+ul {
+  padding: 0;
+  word-wrap: break-word;
+}
