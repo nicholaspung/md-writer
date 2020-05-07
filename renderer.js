@@ -7,7 +7,7 @@ const path = require("path");
 let openedFiles = [];
 let renderSideMeta = { content: "", path: "" };
 let textAreaMeta = { content: "" };
-const recentlyOpenFilesTxt = path.resolve("./recentlyOpenFiles.txt");
+const recentlyOpenFilesTxt = path.resolve("./recently-open-files.txt");
 
 // dom elements
 const mdDisplay = document.getElementById("render-side");
