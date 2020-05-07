@@ -47,6 +47,7 @@ button {
   border: 1px solid black;
   padding: 0.5rem 1rem;
   margin: 0 1rem;
+  cursor: pointer;
 }
 
 textarea {
@@ -76,4 +77,22 @@ textarea {
 ul {
   padding: 0;
   word-wrap: break-word;
+}
+
+ul#recently-opened li {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  border: 1px solid black;
+}
+
+ul#recently-opened li:hover {
+  border: 1px solid blue;
+  cursor: pointer;
+}
+
+#render-text {
+  overflow-y: scroll;
+  height: 87%;
+  padding: 0.5rem;
 }
