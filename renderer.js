@@ -30,10 +30,21 @@ editDisplay.addEventListener("input", (event) => {
   if (renderText) {
     renderText.innerHTML = marked(event.target.value);
     renderSideMeta.content = event.target.value;
+  } else {
+    createRenderTextNode(event.target.value);
   }
 });
 
-saveFileButton.addEventListener("click", save);
+saveFileButton.addEventListener("click", (event) => {
+  if (renderSideMeta.content === textAreaMeta.content) {
+    return;
+  }
+  if (fs.existsSync(renderSideMeta.path)) {
+    fs.writeFileSync(renderSideMeta.path, textAreaMeta.content);
+  } else {
+    ipcRenderer.send("save-file-dialog");
+  }
+});
 
 // ipc
 ipcRenderer.on("selected-file", (event, path, content) => {
@@ -42,10 +53,7 @@ ipcRenderer.on("selected-file", (event, path, content) => {
     const renderText = document.getElementById("render-text");
     renderText.innerHTML = marked(content);
   } else {
-    const div = document.createElement("div");
-    div.id = "render-text";
-    div.innerHTML = marked(content);
-    mdDisplay.appendChild(div);
+    createRenderTextNode(content);
   }
   renderSideMeta.content = content;
   renderSideMeta.path = path[0];
@@ -54,9 +62,13 @@ ipcRenderer.on("selected-file", (event, path, content) => {
   textAreaMeta.content = content;
   // fs
   if (!openedFiles.find((p) => p === path[0])) {
-    saveToRecentlyOpenFilesTxt(path[0]);
-    displayRecentlyOpenFilesTxt();
+    saveAndDisplayRecentlyOpenFiles(path[0]);
   }
+});
+
+ipcRenderer.on("new-file", (event, path) => {
+  fs.writeFileSync(path, textAreaMeta.content);
+  saveAndDisplayRecentlyOpenFiles(path);
 });
 
 // helpers
@@ -64,7 +76,11 @@ function save() {
   if (renderSideMeta.content === textAreaMeta.content) {
     return;
   }
-  fs.writeFileSync(renderSideMeta.path, textAreaMeta.content);
+  if (fs.existsSync(renderSideMeta.path)) {
+    fs.writeFileSync(renderSideMeta.path, textAreaMeta.content);
+  } else {
+    ipcRenderer.send("save-file-dialog");
+  }
 }
 
 function displayRecentlyOpenFilesTxt() {
@@ -111,4 +127,16 @@ function createRecentFilesNodes(file) {
   const li = document.createElement("li");
   li.innerHTML = display;
   recentDisplay.appendChild(li);
+}
+
+function createRenderTextNode(content) {
+  const div = document.createElement("div");
+  div.id = "render-text";
+  div.innerHTML = marked(content);
+  mdDisplay.appendChild(div);
+}
+
+function saveAndDisplayRecentlyOpenFiles(path) {
+  saveAndDisplayRecentlyOpenFiles(path);
+  displayRecentlyOpenFilesTxt();
 }

@@ -58,6 +58,23 @@ ipcMain.on("open-file-dialog", (event) => {
   }
 });
 
+ipcMain.on("save-file-dialog", (event) => {
+  const file = dialog.showSaveDialogSync({
+    filters: [
+      {
+        name: "Markdown Files",
+        extensions: ["md", "mdown", "markdown", "marcdown"],
+      },
+      { name: "Text Files", extensions: ["txt", "text"] },
+    ],
+    // buttonLabel: "Save",
+    // title: "Save File",
+  });
+  if (file) {
+    event.sender.send("new-file", file);
+  }
+});
+
 function openFile(file) {
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
