@@ -1,6 +1,19 @@
 const { ipcRenderer } = require("electron");
 const marked = require("marked");
 const fs = require("fs");
+const path = require("path");
+
+let openedFiles = [];
+
+const recentlyOpenFilesTxt = path.resolve("./recentlyOpenFiles.txt");
+if (fs.existsSync(recentlyOpenFilesTxt)) {
+  openFiles = fs.readFileSync(recentlyOpenFilesTxt);
+  if (openFiles.length > 0) {
+    openFiles = openFiles.split("/n");
+  }
+} else {
+  fs.writeFileSync(recentlyOpenFilesTxt, "");
+}
 
 let renderSideMeta = { content: "", path: "" };
 let textAreaMeta = { content: "" };
@@ -27,8 +40,7 @@ ipcRenderer.on("selected-file", (event, path, content) => {
   div.innerHTML = marked(content);
   renderSide.appendChild(div);
   renderSideMeta.content = content;
-  renderSideMeta.path = path;
-
+  renderSideMeta.path = path[0];
   // edit
   textArea.value = content;
   textAreaMeta.content = content;
@@ -44,9 +56,7 @@ textArea.addEventListener("input", (event) => {
 
 saveFileButton.addEventListener("click", (event) => {
   if (renderSideMeta.content === textAreaMeta.content) {
-    console.log("hello");
     return;
   }
-  console.log("different");
-  // fs.writeFileSync(textArea.path, renderSideMeta.path);
+  fs.writeFileSync(renderSideMeta.path, textAreaMeta.content);
 });
