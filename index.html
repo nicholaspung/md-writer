@@ -16,6 +16,17 @@
     <title>Hello World!</title>
   </head>
   <body>
+    <div id="save-modal" class="hide-modal">
+      <div>
+        <h3 id="save-modal-path">
+          Do you want to save the changes you made to New File?
+        </h3>
+        <p>Your changes will be lost if you don't save them.</p>
+        <button id="save-changes">Save</button>
+        <button id="dont-save-changes">Don't Save</button>
+        <button id="save-cancel">Cancel</button>
+      </div>
+    </div>
     <nav>
       <ul>
         <li><button id="open-file">Open File</button></li>
@@ -28,9 +39,12 @@
       <ul id="recently-opened"></ul>
     </section>
     <section class="edit-side">
-      <h3>Editing File</h3>
+      <h3 id="edit-title">Edit File</h3>
       <textarea name="editing" id="edit-area"></textarea>
     </section>
-    <section id="render-side"><h3>Rendered Content</h3></section>
+    <section id="render-side">
+      <h3>Rendered Content</h3>
+      <div id="render-text"></div>
+    </section>
   </body>
 </html>

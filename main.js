@@ -75,6 +75,7 @@ ipcMain.on("save-file-dialog", (event) => {
   }
 });
 
+// helpers
 function openFile(file) {
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
