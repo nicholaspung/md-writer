@@ -96,3 +96,29 @@ ul#recently-opened li:hover {
   height: 87%;
   padding: 0.5rem;
 }
+
+.hide-modal {
+  display: none;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal div {
+  margin: 15% auto;
+  width: 80%;
+  border: 1px solid black;
+  padding: 1rem;
+  background-color: #fefefe;
+  text-align: center;
+}

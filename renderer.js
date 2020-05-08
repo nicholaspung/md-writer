@@ -3,10 +3,14 @@ const marked = require("marked");
 const fs = require("fs");
 const path = require("path");
 
+// constants
+const emptyRenderSideMeta = Object.freeze({ content: "", path: "" });
+const emptyTextAreaMeta = Object.freeze({ content: "" });
+
 // state
 let openedFiles = [];
-let renderSideMeta = { content: "", path: "" };
-let textAreaMeta = { content: "" };
+let renderSideMeta = { ...emptyRenderSideMeta };
+let textAreaMeta = { ...emptyTextAreaMeta };
 const recentlyOpenFilesTxt = path.resolve("./recently-open-files.txt");
 
 // dom elements
@@ -16,6 +20,14 @@ const openFileButton = document.getElementById("open-file");
 const newFileButton = document.getElementById("new-file");
 const saveFileButton = document.getElementById("save-file");
 const recentDisplay = document.getElementById("recently-opened");
+const renderText = document.getElementById("render-text");
+const editTitle = document.getElementById("edit-title");
+// dom elements save modal
+const saveModal = document.getElementById("save-modal");
+const saveModalPath = document.getElementById("save-modal-path");
+const saveChanges = document.getElementById("save-changes");
+const dontSaveChanges = document.getElementById("dont-save-changes");
+const saveCancel = document.getElementById("save-cancel");
 
 // main
 displayRecentlyOpenFilesTxt();
@@ -26,13 +38,8 @@ openFileButton.addEventListener("click", () => {
 });
 
 editDisplay.addEventListener("input", (event) => {
-  const renderText = document.getElementById("render-text");
-  if (renderText) {
-    renderText.innerHTML = marked(event.target.value);
-    renderSideMeta.content = event.target.value;
-  } else {
-    createRenderTextNode(event.target.value);
-  }
+  renderText.innerHTML = marked(event.target.value);
+  renderSideMeta.content = event.target.value;
 });
 
 saveFileButton.addEventListener("click", (event) => {
@@ -44,17 +51,30 @@ saveFileButton.addEventListener("click", (event) => {
   } else {
     ipcRenderer.send("save-file-dialog");
   }
+  saveModal.id.toggle;
 });
+
+newFileButton.addEventListener("click", (event) => {
+  if (renderSideMeta.content === textAreaMeta.content) {
+    resetEditingArea();
+  } else {
+    // open modal asking if they want to save current file
+    if (renderSideMeta.path) {
+      saveModalPath.textContent = `Do you want to save the changes you made to ${renderSideMeta.path}`;
+    }
+    toggleModal();
+  }
+});
+
+// modal event listeners
+saveChanges.addEventListener("click", () => {});
+dontSaveChanges.addEventListener("click", () => {});
+saveCancel.addEventListener("click", toggleModal);
 
 // ipc
 ipcRenderer.on("selected-file", (event, path, content) => {
   // render
-  if (document.getElementById("render-text")) {
-    const renderText = document.getElementById("render-text");
-    renderText.innerHTML = marked(content);
-  } else {
-    createRenderTextNode(content);
-  }
+  renderText.innerHTML = marked(content);
   renderSideMeta.content = content;
   renderSideMeta.path = path[0];
   // edit
@@ -64,6 +84,8 @@ ipcRenderer.on("selected-file", (event, path, content) => {
   if (!openedFiles.find((p) => p === path[0])) {
     saveAndDisplayRecentlyOpenFiles(path[0]);
   }
+  // title
+  editTitle.textContent = "Editing File";
 });
 
 ipcRenderer.on("new-file", (event, path) => {
@@ -129,14 +151,21 @@ function createRecentFilesNodes(file) {
   recentDisplay.appendChild(li);
 }
 
-function createRenderTextNode(content) {
-  const div = document.createElement("div");
-  div.id = "render-text";
-  div.innerHTML = marked(content);
-  mdDisplay.appendChild(div);
+function saveAndDisplayRecentlyOpenFiles(path) {
+  saveToRecentlyOpenFilesTxt(path);
+  displayRecentlyOpenFilesTxt();
 }
 
-function saveAndDisplayRecentlyOpenFiles(path) {
-  saveAndDisplayRecentlyOpenFiles(path);
-  displayRecentlyOpenFilesTxt();
+function resetEditingArea() {
+  renderSideMeta = { ...emptyRenderSideMeta };
+  textAreaMeta = { ...emptyTextAreaMeta };
+  const renderText = document.getElementById("render-text");
+  renderText.innerHTML = renderSideMeta.content;
+  editDisplay.value = textAreaMeta.content;
+  editTitle.textContent = "New File";
+}
+
+function toggleModal() {
+  saveModal.classList.toggle("hide-modal");
+  saveModal.classList.toggle("modal");
 }
