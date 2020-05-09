@@ -71,7 +71,7 @@ ipcMain.on("save-file-dialog", (event) => {
     // title: "Save File",
   });
   if (file) {
-    event.sender.send("new-file", file);
+    event.sender.send("save-new-file", file);
   }
 });
 
