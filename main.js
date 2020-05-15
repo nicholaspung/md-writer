@@ -10,12 +10,12 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "./src/preload.js"),
     },
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("index.html");
+  mainWindow.loadFile("./src/index.html");
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

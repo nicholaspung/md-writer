@@ -4,19 +4,30 @@ const fs = require("fs");
 const path = require("path");
 
 // constants
-const emptyChangedText = Object.freeze({ content: "", path: "" });
-const emptyInitialText = Object.freeze({ content: "" });
+const EMPTY_CHANGED_TEXT = Object.freeze({ content: "", path: "" });
+const EMPTY_INITIAL_TEXT = Object.freeze({ content: "" });
+const MODAL_STATES = Object.freeze({
+  OPEN: "OPEN",
+  NEW: "NEW",
+  SAVE: "SAVE",
+  NONE: "NONE",
+});
+const CHANGE_FILE_TITLE = (name = "Untitled.md") =>
+  `Do you want to save the changes you made to "${name}"?`;
 
 // state
 let openedFiles = [];
-let changedText = { ...emptyChangedText };
-let initialText = { ...emptyInitialText };
+let changedText = { ...EMPTY_CHANGED_TEXT };
+let initialText = { ...EMPTY_INITIAL_TEXT };
+let modalState = MODAL_STATES.NONE;
+let fileTitle = "";
 // makeshift database, probably can use JSON.stringify() and JSON.parse()
 const recentFilesPath = path.resolve("./recently-open-files.txt");
 
-require("./edit-files");
-require("./save-files");
-require("./open-files");
+require("./components/edit-files");
+require("./components/save-files");
+require("./components/open-files");
+require("./components/new-files");
 
 // dom elements
 // const mdDisplay = document.getElementById("render-side");
