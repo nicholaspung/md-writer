@@ -1,15 +1,15 @@
-const { toggleModal } = require("./save-files-helper");
-const { resetEditingArea } = require("./save-files");
+const { toggleModal } = require('./save-files-helper')
+const { resetEditingArea } = require('./save-files')
 
-const newFileButton = document.getElementById("new-file");
-const saveModalTitle = document.getElementById("save-modal-title");
+const newFileButton = document.getElementById('new-file')
+const saveModalTitle = document.getElementById('save-modal-title')
 
-newFileButton.addEventListener("click", (event) => {
+newFileButton.addEventListener('click', () => {
   if (changedText.content === initialText.content) {
-    resetEditingArea();
-    saveModalTitle.text = CHANGE_FILE_TITLE();
+    resetEditingArea()
+    saveModalTitle.text = CHANGE_FILE_TITLE()
   } else {
-    modalState = MODAL_STATES.NEW;
-    toggleModal();
+    modalState = MODAL_STATES.NEW
+    toggleModal()
   }
-});
+})

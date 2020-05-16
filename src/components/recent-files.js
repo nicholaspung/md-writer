@@ -1,66 +1,65 @@
-const fs = require("fs");
-const path = require("path");
-const { toggleModal } = require("./save-files-helper");
-const { openFile } = require("./open-files-helper");
+const fs = require('fs')
+const path = require('path')
+const { toggleModal } = require('./save-files-helper')
+const { openFile } = require('./open-files-helper')
 
-const recentDisplay = document.getElementById("recently-opened");
+const recentDisplay = document.getElementById('recently-opened')
 
-// on load, either creates file or reads file
-displayRecentlyOpenedFileNames();
+// On load, either creates file or reads file
+displayRecentlyOpenedFileNames()
 
 function displayRecentlyOpenedFileNames() {
   if (fs.existsSync(recentFilesPath)) {
-    const recentFilesBuffer = fs.readFileSync(recentFilesPath, "utf8");
+    const recentFilesBuffer = fs.readFileSync(recentFilesPath, 'utf8')
     if (recentFilesBuffer.length > 0) {
-      // reset display
       if (recentDisplay.childNodes.length > 0) {
-        recentDisplay.textContent = "";
+        recentDisplay.textContent = ''
       }
-      const recentFiles = JSON.parse(recentFilesBuffer).reverse();
-      // create list
-      recentFiles.forEach(createRecentFilesNodes);
-      // set state
-      openedFiles = recentFiles;
+
+      const recentFiles = JSON.parse(recentFilesBuffer).reverse()
+
+      recentFiles.forEach(createRecentFilesNodes)
+
+      openedFiles = recentFiles
     }
   } else {
-    fs.writeFileSync(recentFilesPath, JSON.stringify(openedFiles));
+    fs.writeFileSync(recentFilesPath, JSON.stringify(openedFiles))
   }
 }
 
 function createRecentFilesNodes(path) {
-  const text = path.slice(path.lastIndexOf("\\") + 1);
-  const li = document.createElement("li");
-  li.innerHTML = text;
-  li.addEventListener("click", openRecentFile);
-  recentDisplay.appendChild(li);
+  const text = path.slice(path.lastIndexOf('\\') + 1)
+  const li = document.createElement('li')
+  li.innerHTML = text
+  li.addEventListener('click', openRecentFile)
+  recentDisplay.appendChild(li)
 }
 
 function updateRecentFiles(path) {
   if (openedFiles.includes(path)) {
-    openedFiles.splice(openedFiles.indexOf(path), 1);
+    openedFiles.splice(openedFiles.indexOf(path), 1)
   }
-  openedFiles.reverse();
-  openedFiles.push(path);
+  openedFiles.reverse()
+  openedFiles.push(path)
   if (openedFiles.length > 5) {
-    openedFiles.shift();
+    openedFiles.shift()
   }
-  fs.writeFileSync(recentFilesPath, JSON.stringify(openedFiles));
-  displayRecentlyOpenedFileNames();
+  fs.writeFileSync(recentFilesPath, JSON.stringify(openedFiles))
+  displayRecentlyOpenedFileNames()
 }
 
 function openRecentFile(event) {
-  const openPath = path.resolve(`./${event.target.innerHTML}`);
+  const openPath = path.resolve(`./${event.target.innerHTML}`)
   if (changedText.content !== initialText.content) {
-    modalState = MODAL_STATES.RECENT;
-    recentPath = openPath;
-    console.log(changedText.path);
-    toggleModal();
+    modalState = MODAL_STATES.RECENT
+    recentPath = openPath
+    toggleModal()
   } else {
-    openFile(openPath);
-    updateRecentFiles(openPath);
+    openFile(openPath)
+    updateRecentFiles(openPath)
   }
 }
 
 module.exports = {
   updateRecentFiles,
-};
+}
