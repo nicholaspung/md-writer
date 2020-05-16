@@ -53,8 +53,7 @@ ipcMain.on("open-file-dialog", (event) => {
     ],
   });
   if (files) {
-    let content = openFile(files[0]);
-    event.sender.send("selected-file", files, content);
+    event.sender.send("selected-file", files[0]);
   }
 });
 
@@ -74,10 +73,3 @@ ipcMain.on("save-file-dialog", (event) => {
     event.sender.send("save-new-file", file);
   }
 });
-
-// helpers
-function openFile(file) {
-  const content = fs.readFileSync(file).toString();
-  app.addRecentDocument(file);
-  return content;
-}

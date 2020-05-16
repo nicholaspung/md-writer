@@ -10,8 +10,10 @@
 
 ## Editing Files ✔
 
-## Displaying Recently Opened Files
+## Displaying Recently Opened Files ✔
 
 - Add a visual feedback toast when file has been saved, disappears after 3 seconds
 - Add CTRL+S, CRRL+O, CTRL+N for shortcuts
 - Modify menu
+- Make CSS changes
+- Add .prettierrc and .eslintrc files

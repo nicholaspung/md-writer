@@ -1,4 +1,5 @@
-const { toggleModal, resetEditingArea } = require("./save-files");
+const { toggleModal } = require("./save-files-helper");
+const { resetEditingArea } = require("./save-files");
 
 const newFileButton = document.getElementById("new-file");
 const saveModalTitle = document.getElementById("save-modal-title");
