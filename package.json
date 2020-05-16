@@ -4,7 +4,8 @@
   "description": "A minimal Electron application to help you write .md files in a structured way.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build-packager": "electron-packager . md-writer --platform=win32 --arch=ia32 --icon=assets/icons/win/inco.ico --prune=true --out=release-builds"
   },
   "repository": "https://github.com/electron/md-writer",
   "author": "Nicholas Pung",
