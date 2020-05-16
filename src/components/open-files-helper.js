@@ -1,37 +1,35 @@
-const marked = require("marked");
-const fs = require("fs");
+const marked = require('marked')
+const fs = require('fs')
 const {
   mdDisplay,
   editDisplay,
   editTitle,
   saveModalTitle,
-} = require("./html-elements");
+} = require('./html-elements')
 
-const fileName = (path) => path.slice(path.lastIndexOf("\\") + 1);
+const fileName = (path) => path.slice(path.lastIndexOf('\\') + 1)
 
 function openFile(path, cb) {
-  const content = fs.readFileSync(path, "utf8");
-  // render
-  mdDisplay.innerHTML = marked(content);
-  changedText.content = content;
-  changedText.path = path;
+  const content = fs.readFileSync(path, 'utf8')
 
-  // edit
-  editDisplay.value = content;
-  initialText.content = content;
+  mdDisplay.innerHTML = marked(content)
+  changedText.content = content
+  changedText.path = path
 
-  // title
-  editTitle.textContent = `Editing: ${fileName(path)}`;
-  saveModalTitle.textContent = CHANGE_FILE_TITLE(fileName(path));
+  editDisplay.value = content
+  initialText.content = content
 
-  // reset modal state
-  modalState = MODAL_STATES.NONE;
+  editTitle.textContent = `Editing: ${fileName(path)}`
+  saveModalTitle.textContent = CHANGE_FILE_TITLE(fileName(path))
+
+  modalState = MODAL_STATES.NONE
+
   if (cb) {
-    cb(path);
+    cb(path)
   }
 }
 
 module.exports = {
   fileName,
   openFile,
-};
+}
