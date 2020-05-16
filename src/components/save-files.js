@@ -1,18 +1,21 @@
 const { ipcRenderer } = require("electron");
 const fs = require("fs");
+const {
+  mdDisplay,
+  editDisplay,
+  editTitle,
+  saveModalTitle,
+} = require("./html-elements");
+const { openFile } = require("./open-files-helper");
+const { updateRecentFiles } = require("./recent-files");
+const { toggleModal } = require("./save-files-helper");
 
-const mdDisplay = document.getElementById("render-text");
-const editDisplay = document.getElementById("edit-area");
-const editTitle = document.getElementById("edit-title");
 const saveFileButton = document.getElementById("save-file");
-
-const saveModal = document.getElementById("save-modal");
-const saveModalTitle = document.getElementById("save-modal-title");
 const saveChanges = document.getElementById("save-changes");
 const dontSaveChanges = document.getElementById("dont-save-changes");
 const saveCancel = document.getElementById("save-cancel");
 
-saveFileButton.addEventListener("click", (event) => {
+saveFileButton.addEventListener("click", () => {
   save();
   makeTextAreaEqual();
 });
@@ -58,24 +61,21 @@ function resetEditingArea() {
   saveModalTitle.textContent = CHANGE_FILE_TITLE();
 }
 
-function toggleModal() {
-  saveModal.classList.toggle("hide-modal");
-  saveModal.classList.toggle("modal");
-}
-
 function makeTextAreaEqual() {
   initialText.content = changedText.content;
 }
 
 function checkModalState() {
+  console.log(changedText, initialText);
   if (modalState === MODAL_STATES.OPEN) {
     ipcRenderer.send("open-file-dialog");
-  } else if (modalState === MODAL_STATES.NEW) {
-    return;
+  } else if (modalState === MODAL_STATES.RECENT) {
+    openFile(recentPath);
+    updateRecentFiles(recentPath);
   }
+  modalState = MODAL_STATES.NONE;
 }
 
 module.exports = {
-  toggleModal,
   resetEditingArea,
 };

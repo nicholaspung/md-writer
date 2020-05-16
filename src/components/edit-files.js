@@ -1,7 +1,5 @@
 const marked = require("marked");
-
-const editDisplay = document.getElementById("edit-area");
-const mdDisplay = document.getElementById("render-text");
+const { editDisplay, mdDisplay } = require("./html-elements");
 
 editDisplay.addEventListener("input", (event) => {
   mdDisplay.innerHTML = marked(event.target.value);

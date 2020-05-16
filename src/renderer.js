@@ -9,7 +9,7 @@ const EMPTY_INITIAL_TEXT = Object.freeze({ content: "" });
 const MODAL_STATES = Object.freeze({
   OPEN: "OPEN",
   NEW: "NEW",
-  SAVE: "SAVE",
+  RECENT: "RECENT",
   NONE: "NONE",
 });
 const CHANGE_FILE_TITLE = (name = "Untitled.md") =>
@@ -21,13 +21,19 @@ let changedText = { ...EMPTY_CHANGED_TEXT };
 let initialText = { ...EMPTY_INITIAL_TEXT };
 let modalState = MODAL_STATES.NONE;
 let fileTitle = "";
+let recentPath = "";
 // makeshift database, probably can use JSON.stringify() and JSON.parse()
 const recentFilesPath = path.resolve("./recently-open-files.txt");
+
+require("./components/html-elements");
+require("./components/open-files-helper");
+require("./components/save-files-helper");
 
 require("./components/edit-files");
 require("./components/save-files");
 require("./components/open-files");
 require("./components/new-files");
+require("./components/recent-files");
 
 // dom elements
 // const mdDisplay = document.getElementById("render-side");
