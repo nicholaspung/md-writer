@@ -16,6 +16,6 @@
     "prettier": "2.0.5"
   },
   "dependencies": {
-    "marked": "^1.0.0"
+    "marked": "^4.0.10"
   }
 }
